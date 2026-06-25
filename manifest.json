@@ -6,7 +6,7 @@
   "scope": "/ICU-Calc/",
   "display": "standalone",
   "background_color": "#0a0f1e",
-  "theme_color": "#1e40af",
+  "theme_color": "#0a0f1e",
   "orientation": "portrait-primary",
   "lang": "en",
   "categories": ["medical", "health"],

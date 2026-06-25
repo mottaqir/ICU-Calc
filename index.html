@@ -7,7 +7,7 @@
 
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0f1e">
+<meta name="theme-color" content="#0a0f1e" id="theme-meta">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -3437,6 +3437,8 @@ function applyTheme(theme) {
  // In dark mode: show bright sun (to indicate "switch to light")
  document.getElementById('themeIconSun').style.display = 'block';
  document.getElementById('themeIconMoon').style.display = 'none';
+ const meta = document.getElementById('theme-meta');
+ if (meta) meta.setAttribute('content', theme === 'light' ? '#f4f6fb' : '#0a0f1e');
  }
 }
 

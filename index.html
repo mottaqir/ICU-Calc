@@ -2,18 +2,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Bedside Critical Measures</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0f1e" id="meta-theme-color">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ICU Calc">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
-<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+<meta name="theme-color" id="meta-theme-color" content="#0a0f1e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="meta-theme-color-light" content="#f4f6fb" media="(prefers-color-scheme: light)">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180x180.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167x167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bedside Critical Measures</title>
 <style>
  :root {
  --bg: #0a0f1e;
@@ -2059,6 +2064,226 @@
   }
  </style>
 
+<!-- ═══════════════════════════════════════════════════ DKA / euDKA / HHS ═══ -->
+<div class="calc-card" id="calccard-dka">
+ <div class="calc-title" style="color:#f59e0b" onclick="toggleCalc('calccard-dka')">
+  <span class="calc-title-dot" style="background:#f59e0b"></span>
+  <span>🩸 DKA / Euglycaemic DKA / HHS Differentiator</span>
+  <span class="calc-chevron" style="margin-left:auto;font-size:10px;transition:transform 0.2s;color:var(--text-faint)">&#9660;</span>
+ </div>
+ <div class="calc-body" style="display:none">
+
+  <!-- Input grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+
+   <!-- Glucose -->
+   <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px">
+    <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Blood Glucose (mmol/L)</div>
+    <div style="display:flex;gap:4px;align-items:center">
+     <input type="range" min="2" max="60" step="0.5" value="18" id="dka-gluc" oninput="syncField('dka-gluc',this.value);calcDKA()" style="flex:1;accent-color:#f59e0b">
+     <input type="number" min="2" max="60" step="0.5" value="18" id="dka-gluc-n" oninput="syncField('dka-gluc',this.value);calcDKA()" style="width:52px;background:var(--surface-input);border:1px solid var(--border-strong);border-radius:5px;color:var(--text);padding:3px;font-size:12px;font-weight:700;text-align:center">
+    </div>
+   </div>
+
+   <!-- pH -->
+   <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px">
+    <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Arterial pH</div>
+    <div style="display:flex;gap:4px;align-items:center">
+     <input type="range" min="6.80" max="7.50" step="0.01" value="7.25" id="dka-ph" oninput="syncField('dka-ph',this.value);calcDKA()" style="flex:1;accent-color:#f59e0b">
+     <input type="number" min="6.80" max="7.50" step="0.01" value="7.25" id="dka-ph-n" oninput="syncField('dka-ph',this.value);calcDKA()" style="width:52px;background:var(--surface-input);border:1px solid var(--border-strong);border-radius:5px;color:var(--text);padding:3px;font-size:12px;font-weight:700;text-align:center">
+    </div>
+   </div>
+
+   <!-- HCO3 -->
+   <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px">
+    <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Bicarbonate (mEq/L)</div>
+    <div style="display:flex;gap:4px;align-items:center">
+     <input type="range" min="2" max="30" step="0.5" value="12" id="dka-hco3" oninput="syncField('dka-hco3',this.value);calcDKA()" style="flex:1;accent-color:#f59e0b">
+     <input type="number" min="2" max="30" step="0.5" value="12" id="dka-hco3-n" oninput="syncField('dka-hco3',this.value);calcDKA()" style="width:52px;background:var(--surface-input);border:1px solid var(--border-strong);border-radius:5px;color:var(--text);padding:3px;font-size:12px;font-weight:700;text-align:center">
+    </div>
+   </div>
+
+   <!-- Anion Gap -->
+   <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px">
+    <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Anion Gap (mEq/L) <span style="font-weight:400">Na−(Cl+HCO₃)</span></div>
+    <div style="display:flex;gap:4px;align-items:center">
+     <input type="range" min="4" max="40" step="1" value="18" id="dka-ag" oninput="syncField('dka-ag',this.value);calcDKA()" style="flex:1;accent-color:#f59e0b">
+     <input type="number" min="4" max="40" step="1" value="18" id="dka-ag-n" oninput="syncField('dka-ag',this.value);calcDKA()" style="width:52px;background:var(--surface-input);border:1px solid var(--border-strong);border-radius:5px;color:var(--text);padding:3px;font-size:12px;font-weight:700;text-align:center">
+    </div>
+   </div>
+
+   <!-- Osmolality -->
+   <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px">
+    <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Eff. Osmolality (mOsm/kg) <span style="font-weight:400">2Na+Glu/18</span></div>
+    <div style="display:flex;gap:4px;align-items:center">
+     <input type="range" min="260" max="420" step="1" value="300" id="dka-osm" oninput="syncField('dka-osm',this.value);calcDKA()" style="flex:1;accent-color:#f59e0b">
+     <input type="number" min="260" max="420" step="1" value="300" id="dka-osm-n" oninput="syncField('dka-osm',this.value);calcDKA()" style="width:52px;background:var(--surface-input);border:1px solid var(--border-strong);border-radius:5px;color:var(--text);padding:3px;font-size:12px;font-weight:700;text-align:center">
+    </div>
+   </div>
+
+   <!-- Ketonaemia -->
+   <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px">
+    <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Ketonaemia / Ketonuria</div>
+    <div style="display:flex;gap:5px;margin-top:2px">
+     <button onclick="dkaSetKetone('none',this)" id="dka-ket-none" class="ins-sens-btn ins-sens-active" style="font-size:10px;padding:4px 2px">Absent</button>
+     <button onclick="dkaSetKetone('mild',this)" id="dka-ket-mild" class="ins-sens-btn" style="font-size:10px;padding:4px 2px">Mild/+</button>
+     <button onclick="dkaSetKetone('mod',this)" id="dka-ket-mod" class="ins-sens-btn" style="font-size:10px;padding:4px 2px">Mod/++</button>
+     <button onclick="dkaSetKetone('high',this)" id="dka-ket-high" class="ins-sens-btn" style="font-size:10px;padding:4px 2px">High/+++</button>
+    </div>
+   </div>
+
+  </div>
+
+  <!-- Mental status -->
+  <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px;margin-bottom:8px">
+   <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px">Mental Status</div>
+   <div style="display:flex;gap:5px;flex-wrap:wrap">
+    <button onclick="dkaSetAMS('alert',this)" id="dka-ams-alert" class="ins-sens-btn ins-sens-active" style="font-size:10px;padding:4px 4px;flex:1">Alert</button>
+    <button onclick="dkaSetAMS('drowsy',this)" id="dka-ams-drowsy" class="ins-sens-btn" style="font-size:10px;padding:4px 4px;flex:1">Drowsy</button>
+    <button onclick="dkaSetAMS('stupor',this)" id="dka-ams-stupor" class="ins-sens-btn" style="font-size:10px;padding:4px 4px;flex:1">Stupor</button>
+    <button onclick="dkaSetAMS('coma',this)" id="dka-ams-coma" class="ins-sens-btn" style="font-size:10px;padding:4px 4px;flex:1">Coma</button>
+   </div>
+  </div>
+
+  <!-- SGLT2i / Pregnancy flag -->
+  <div style="background:var(--surface-deep);border-radius:7px;padding:6px 8px;margin-bottom:8px">
+   <div style="font-size:9.5px;color:var(--text-faint);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px">Clinical Context (check all that apply)</div>
+   <div style="display:flex;flex-direction:column;gap:4px">
+    <label style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text);cursor:pointer">
+     <input type="checkbox" id="dka-sglt2" onchange="calcDKA()" style="width:14px;height:14px;accent-color:#f59e0b"> On SGLT2 inhibitor (empagliflozin, dapagliflozin, canagliflozin etc.)
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text);cursor:pointer">
+     <input type="checkbox" id="dka-preg" onchange="calcDKA()" style="width:14px;height:14px;accent-color:#f59e0b"> Pregnant / Peripartum (lower thresholds apply)
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text);cursor:pointer">
+     <input type="checkbox" id="dka-t1dm" onchange="calcDKA()" style="width:14px;height:14px;accent-color:#f59e0b"> Known T1DM
+    </label>
+   </div>
+  </div>
+
+  <!-- Result box -->
+  <div id="dka-result-box" style="border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--surface-deep);border:2px solid #f59e0b40">
+   <div id="dka-diagnosis" style="font-size:17px;font-weight:900;color:#f59e0b;margin-bottom:6px">— Enter values above —</div>
+   <div id="dka-severity" style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text-muted)"></div>
+   <div id="dka-criteria" style="font-size:11px;color:var(--text-faint);line-height:1.7;margin-bottom:6px"></div>
+   <div id="dka-management" style="font-size:11.5px;color:var(--text);line-height:1.75;border-top:1px solid var(--border);padding-top:6px;margin-top:4px"></div>
+  </div>
+
+  <!-- Comparison table -->
+  <div style="margin-bottom:8px">
+   <div style="font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;padding-left:8px;border-left:3px solid #f59e0b">Diagnostic Criteria Comparison</div>
+   <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
+    <table style="width:100%;border-collapse:collapse;font-size:10.5px;min-width:300px">
+     <thead>
+      <tr style="background:var(--surface-deep)">
+       <th style="text-align:left;padding:6px 7px;color:var(--text-faint);font-weight:700;border-bottom:1px solid var(--border-strong);white-space:nowrap">Parameter</th>
+       <th style="text-align:center;padding:6px 5px;color:#ef4444;font-weight:700;border-bottom:1px solid var(--border-strong)">DKA</th>
+       <th style="text-align:center;padding:6px 5px;color:#a78bfa;font-weight:700;border-bottom:1px solid var(--border-strong)">euDKA</th>
+       <th style="text-align:center;padding:6px 5px;color:#06b6d4;font-weight:700;border-bottom:1px solid var(--border-strong)">HHS</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr style="border-bottom:1px solid var(--border)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">Glucose</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">&gt;11 mmol/L</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">≤11 mmol/L<br><span style="font-size:9.5px;color:var(--text-faint)">(by definition)</span></td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">&gt;33 mmol/L</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:var(--surface-deep)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">pH</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">&lt;7.30</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">&lt;7.30</td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">&gt;7.30<br><span style="font-size:9.5px;color:var(--text-faint)">(usually normal)</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">HCO₃</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">&lt;15 mEq/L</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">&lt;15 mEq/L</td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">&gt;15 mEq/L<br><span style="font-size:9.5px;color:var(--text-faint)">(often 15–18)</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:var(--surface-deep)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">Anion Gap</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">&gt;12 (high)</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">&gt;12 (high)</td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">Normal/mildly ↑</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">Ketonaemia</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">Moderate–high</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">Moderate–high</td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">Absent / trace</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:var(--surface-deep)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">Osmolality</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">Variable<br><span style="font-size:9.5px;color:var(--text-faint)">&lt;320 typical</span></td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">Normal / ↑</td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">&gt;320<br><span style="font-size:9.5px;color:var(--text-faint)">(often &gt;340)</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">AMS / Coma</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">Less common</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">Less common</td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">Common<br><span style="font-size:9.5px;color:var(--text-faint)">(hallmark)</span></td>
+      </tr>
+      <tr style="background:var(--surface-deep)">
+       <td style="padding:5px 7px;color:var(--text-muted);font-weight:600">Typical DM type</td>
+       <td style="text-align:center;padding:5px 4px;color:#ef4444">T1DM (&gt;T2DM)</td>
+       <td style="text-align:center;padding:5px 4px;color:#a78bfa">T1DM, T2DM<br><span style="font-size:9.5px;color:var(--text-faint)">on SGLT2i/fasting</span></td>
+       <td style="text-align:center;padding:5px 4px;color:#06b6d4">T2DM (mostly)</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+
+  <!-- DKA severity sub-table -->
+  <div style="margin-bottom:8px">
+   <div style="font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;padding-left:8px;border-left:3px solid #ef4444">DKA Severity Grading (ADA)</div>
+   <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
+    <table style="width:100%;border-collapse:collapse;font-size:10px;min-width:280px">
+     <thead>
+      <tr style="background:var(--surface-deep)">
+       <th style="text-align:left;padding:5px 7px;color:var(--text-faint);font-weight:700;border-bottom:1px solid var(--border-strong)">Parameter</th>
+       <th style="text-align:center;padding:5px 4px;color:#10b981;font-weight:700;border-bottom:1px solid var(--border-strong)">Mild</th>
+       <th style="text-align:center;padding:5px 4px;color:#f59e0b;font-weight:700;border-bottom:1px solid var(--border-strong)">Moderate</th>
+       <th style="text-align:center;padding:5px 4px;color:#ef4444;font-weight:700;border-bottom:1px solid var(--border-strong)">Severe</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr style="border-bottom:1px solid var(--border)">
+       <td style="padding:4px 7px;color:var(--text-muted);font-weight:600">pH</td>
+       <td style="text-align:center;padding:4px;color:#10b981">7.25–7.30</td>
+       <td style="text-align:center;padding:4px;color:#f59e0b">7.00–7.24</td>
+       <td style="text-align:center;padding:4px;color:#ef4444">&lt;7.00</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:var(--surface-deep)">
+       <td style="padding:4px 7px;color:var(--text-muted);font-weight:600">HCO₃</td>
+       <td style="text-align:center;padding:4px;color:#10b981">15–18</td>
+       <td style="text-align:center;padding:4px;color:#f59e0b">10–14</td>
+       <td style="text-align:center;padding:4px;color:#ef4444">&lt;10</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+       <td style="padding:4px 7px;color:var(--text-muted);font-weight:600">Sensorium</td>
+       <td style="text-align:center;padding:4px;color:#10b981">Alert</td>
+       <td style="text-align:center;padding:4px;color:#f59e0b">Alert/drowsy</td>
+       <td style="text-align:center;padding:4px;color:#ef4444">Stupor/coma</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+
+  <div class="note-box">
+   <strong>euDKA key triggers:</strong> SGLT2 inhibitors (most common) · Fasting/low carb · Pregnancy · Alcohol · Vomiting · Reduced insulin dose<br>
+   <strong>Pitfall:</strong> Normal glucose misleads — always check pH, ketones, AG in any sick diabetic on SGLT2i<br>
+   <strong>HHS hallmark:</strong> Profound dehydration (average 9–10L deficit) + hyperosmolarity ± AMS — acidosis mild/absent<br>
+   <strong>Overlap:</strong> ~30% of HHS has some ketosis; DKA can have high osmolality — always treat the dominant picture<br>
+   ⚠️ In euDKA: do NOT aim to normalise glucose before clearing ketones. Continue insulin + add dextrose infusion when glucose &lt;11 mmol/L.
+  </div>
+
+ </div>
+</div>
+
 <!-- ─── INSULIN ─── -->
 <div class="calc-card" id="calccard-insulin">
  <div class="calc-title" style="color:#06b6d4" onclick="toggleCalc('calccard-insulin')">
@@ -2746,7 +2971,7 @@
 <div class="calc-card" id="calccard-braindeath" style="margin-top:0">
   <div class="calc-title" style="color:#a78bfa" onclick="toggleCalc('calccard-braindeath')">
    <span class="calc-title-dot" style="background:#a78bfa"></span>
-   <span>🧠 Brain Death Assessment <span style="color:var(--text-faint);font-weight:400">— Clinical Criteria Checklist</span></span>
+   <span>🧠 Brain Death Assessment <span style="color:var(--text-faint);font-weight:400">— Clinical Criteria<br>Checklist</span></span>
    <span class="calc-chevron" style="margin-left:auto;font-size:10px;transition:transform 0.2s;color:var(--text-faint)">&#9660;</span>
   </div>
   <div class="calc-body" style="display:none">
@@ -4823,17 +5048,16 @@ function calcSIADH() {
 }
 
 function applyTheme(theme) {
- const tc = document.getElementById('meta-theme-color');
  if (theme === 'light') {
  document.body.setAttribute('data-theme', 'light');
+ // In light mode: show dark moon (to indicate "switch to dark")
  document.getElementById('themeIconSun').style.display = 'none';
  document.getElementById('themeIconMoon').style.display = 'block';
- if (tc) tc.setAttribute('content', '#f4f6fb');
  } else {
  document.body.removeAttribute('data-theme');
+ // In dark mode: show bright sun (to indicate "switch to light")
  document.getElementById('themeIconSun').style.display = 'block';
  document.getElementById('themeIconMoon').style.display = 'none';
- if (tc) tc.setAttribute('content', '#0a0f1e');
  }
 }
 
@@ -6010,6 +6234,170 @@ function calcBrainDeath() {
  if (boxEl) boxEl.style.borderColor = borderColor;
 }
 
+// ─────────────────────── DKA / euDKA / HHS DIFFERENTIATOR ───────────────────────
+let dkaKetone = 'none';
+let dkaAMS = 'alert';
+
+function dkaSetKetone(val, btn) {
+  dkaKetone = val;
+  ['none','mild','mod','high'].forEach(k => {
+    const el = document.getElementById('dka-ket-' + k);
+    if (el) { el.classList.remove('ins-sens-active'); }
+  });
+  if (btn) btn.classList.add('ins-sens-active');
+  calcDKA();
+}
+
+function dkaSetAMS(val, btn) {
+  dkaAMS = val;
+  ['alert','drowsy','stupor','coma'].forEach(k => {
+    const el = document.getElementById('dka-ams-' + k);
+    if (el) { el.classList.remove('ins-sens-active'); }
+  });
+  if (btn) btn.classList.add('ins-sens-active');
+  calcDKA();
+}
+
+function calcDKA() {
+  const gluc   = parseFloat(document.getElementById('dka-gluc')?.value) || 0;
+  const ph     = parseFloat(document.getElementById('dka-ph')?.value) || 0;
+  const hco3   = parseFloat(document.getElementById('dka-hco3')?.value) || 0;
+  const ag     = parseFloat(document.getElementById('dka-ag')?.value) || 0;
+  const osm    = parseFloat(document.getElementById('dka-osm')?.value) || 0;
+  const sglt2  = document.getElementById('dka-sglt2')?.checked;
+  const preg   = document.getElementById('dka-preg')?.checked;
+  const t1dm   = document.getElementById('dka-t1dm')?.checked;
+
+  const diagEl = document.getElementById('dka-diagnosis');
+  const sevEl  = document.getElementById('dka-severity');
+  const criEl  = document.getElementById('dka-criteria');
+  const mgtEl  = document.getElementById('dka-management');
+  const boxEl  = document.getElementById('dka-result-box');
+  if (!diagEl) return;
+
+  const ketHigh = dkaKetone === 'high' || dkaKetone === 'mod';
+  const ketPos  = dkaKetone !== 'none';
+  const amsAltered = dkaAMS !== 'alert';
+  const acidotic = ph < 7.30;
+  const hco3Low  = hco3 < 15;
+  const agHigh   = ag > 12;
+  const glucHigh = gluc > 11;
+  const glucVeryHigh = gluc > 33;
+  const osmHigh  = osm > 320;
+
+  let diagnosis = '', severity = '', criteria = '', management = '', color = '#f59e0b', borderColor = '#f59e0b60';
+
+  // ── Scoring logic ──
+  const isDKA    = acidotic && hco3Low && agHigh && ketHigh && glucHigh;
+  const isEuDKA  = acidotic && hco3Low && agHigh && ketHigh && !glucHigh;
+  const isHHS    = glucVeryHigh && osmHigh && !ketHigh && !acidotic;
+  const isOverlap= glucVeryHigh && osmHigh && ketPos && acidotic;
+  const euDKAtrigger = isEuDKA || (acidotic && hco3Low && agHigh && ketHigh && !glucHigh);
+
+  if (isDKA || euDKAtrigger || isHHS || isOverlap) {
+
+    if (isOverlap) {
+      diagnosis = '⚠️ DKA + HHS Overlap';
+      color = '#f97316'; borderColor = '#f9731660';
+      criteria = '✅ High glucose (>33) · ✅ High osmolality (>320) · ✅ Acidosis (pH<7.30) · ✅ Ketonaemia present';
+      management = `<strong style="color:#f97316">Treat as DKA primarily.</strong><br>
+IV 0.9% NaCl — correct volume deficit carefully (avoid rapid osmolality drop)<br>
+IV Actrapid infusion 0.1 unit/kg/hr · Add dextrose when glucose &lt;11 mmol/L<br>
+Check K⁺ — replace before starting insulin if &lt;3.5 mEq/L<br>
+Monitor osmolality 4-hourly — target drop &lt;3 mOsm/kg/hr<br>
+⚠️ Rapid osmolality correction risks cerebral oedema`;
+    }
+    else if (isEuDKA || (!glucHigh && acidotic && hco3Low && agHigh && ketHigh)) {
+      diagnosis = '🟣 Euglycaemic DKA (euDKA)';
+      color = '#a78bfa'; borderColor = '#a78bfa60';
+
+      const flags = [];
+      if (sglt2) flags.push('SGLT2i use ✔');
+      if (preg)  flags.push('Pregnancy ✔');
+      if (t1dm)  flags.push('T1DM ✔');
+
+      criteria = `✅ Glucose ≤11 mmol/L · ✅ pH &lt;7.30 · ✅ HCO₃ &lt;15 · ✅ AG >12 · ✅ Ketonaemia present`;
+      if (flags.length) criteria += `<br><span style="color:#a78bfa;font-weight:600">Trigger: ${flags.join(' · ')}</span>`;
+
+      management = `<strong style="color:#a78bfa">Do NOT be misled by normal glucose.</strong><br>
+IV Actrapid 0.05–0.1 unit/kg/hr<br>
+Start 5–10% Dextrose infusion immediately (glucose normal — still needs insulin to clear ketones)<br>
+IV 0.9% NaCl — volume replacement<br>
+K⁺ replacement — check hourly initially<br>
+Hold SGLT2i immediately and do not restart until fully recovered<br>
+Target: ketones &lt;0.6 mmol/L · pH &gt;7.30 · HCO₃ &gt;15 before stopping insulin`;
+    }
+    else if (isDKA) {
+      // DKA severity
+      let sev = '', sevColor = '';
+      if (ph >= 7.25)       { sev = 'Mild DKA';    sevColor = '#10b981'; }
+      else if (ph >= 7.00)  { sev = 'Moderate DKA'; sevColor = '#f59e0b'; }
+      else                  { sev = 'Severe DKA';   sevColor = '#ef4444'; }
+      if (preg && ph < 7.30) { sev = 'Severe (Pregnancy)'; sevColor = '#ef4444'; }
+
+      diagnosis = `🔴 Diabetic Ketoacidosis (DKA)`;
+      color = '#ef4444'; borderColor = '#ef444460';
+      severity = `<span style="color:${sevColor}">${sev}</span>`;
+
+      criteria = `✅ Glucose >11 mmol/L · ✅ pH &lt;7.30 · ✅ HCO₃ &lt;15 · ✅ AG >12 · ✅ Ketonaemia`;
+
+      management = `<strong style="color:#ef4444">ICU/HDU management:</strong><br>
+IV 0.9% NaCl: 1L over 1st hr · then 500ml/hr × 2h · then 250ml/hr (reassess)<br>
+IV Actrapid infusion: 0.1 unit/kg/hr (fixed rate) — do NOT bolus<br>
+K⁺ replacement: if K &lt;3.5 → replace before insulin; K 3.5–5.5 → 20–40 mEq/hr with fluid; K &gt;5.5 → hold K<br>
+Switch to 5% Dextrose + 0.45% NaCl when glucose &lt;11 mmol/L — continue insulin<br>
+Bicarbonate: only if pH &lt;6.9 (100 mEq NaHCO₃ over 2h)<br>
+Target resolution: glucose &lt;11 · AG &lt;12 · HCO₃ &gt;15 · pH &gt;7.30 · ketones &lt;0.6`;
+    }
+    else if (isHHS) {
+      diagnosis = '🔵 Hyperglycaemic Hyperosmolar State (HHS)';
+      color = '#06b6d4'; borderColor = '#06b6d460';
+      criteria = `✅ Glucose >33 mmol/L · ✅ Osmolality >320 · ✅ Ketonaemia absent/trace · ✅ pH &gt;7.30`;
+
+      const amsMsg = dkaAMS !== 'alert' ? `⚠️ AMS/coma present — consistent with severe HHS` : '';
+
+      management = `<strong style="color:#06b6d4">Volume replacement is primary therapy:</strong><br>
+Average fluid deficit: 9–10 litres (replace over 24–48h — NOT rapidly)<br>
+IV 0.9% NaCl: 1L over 1st hr · then titrate (250–500ml/hr based on response)<br>
+Target osmolality drop: &lt;3 mOsm/kg/hr — risk cerebral oedema if faster<br>
+IV Actrapid: start only after adequate volume — 0.05 unit/kg/hr; add dextrose when glucose &lt;15 mmol/L<br>
+K⁺ replacement: always — total body deficit severe despite apparent normoK<br>
+DVT prophylaxis mandatory — very high thrombosis risk<br>
+Identify precipitant: infection, MI, stroke, medications<br>
+${amsMsg}`;
+    }
+
+  } else {
+    // Insufficient criteria / inconclusive
+    const hasAcidosis = acidotic;
+    const hasKetones  = ketPos;
+
+    if (hasAcidosis && hasKetones && !agHigh) {
+      diagnosis = '⚠️ Possible Starvation Ketosis / Alcoholic KA';
+      color = '#f59e0b'; borderColor = '#f59e0b40';
+      criteria = 'AG not elevated — consider starvation ketosis, AKA, or mixed picture';
+      management = `Check for alcohol history · check lactate · if AKA: IV dextrose + thiamine`;
+    } else if (glucVeryHigh && !osmHigh) {
+      diagnosis = '⚠️ Severe Hyperglycaemia — HHS criteria not fully met';
+      color = '#06b6d4'; borderColor = '#06b6d440';
+      criteria = 'Glucose very high but osmolality &lt;320 — reassess osmolality calculation';
+      management = `Recalculate: Eff. Osm = 2×Na + Glucose(mg/dL)/18<br>Convert mmol/L to mg/dL: multiply by 18`;
+    } else {
+      diagnosis = '— Enter values to differentiate —';
+      severity = ''; criteria = ''; management = '';
+      color = 'var(--text-muted)'; borderColor = '#f59e0b30';
+    }
+  }
+
+  diagEl.textContent = '';
+  diagEl.innerHTML = diagnosis;
+  diagEl.style.color = color;
+  sevEl.innerHTML = severity;
+  criEl.innerHTML = criteria;
+  mgtEl.innerHTML = management;
+  if (boxEl) boxEl.style.borderColor = borderColor;
+}
+
 function toggleCalc(id) {
   const card = document.getElementById(id);
   if (!card) return;
@@ -6021,14 +6409,43 @@ function toggleCalc(id) {
   if (chevron) chevron.style.transform = isOpen ? 'rotate(-90deg)' : 'rotate(0deg)';
 }
 </script>
+
 <script>
+// ── Service Worker Registration ──
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js')
-      .then(function(r){ console.log('[SW] ok', r.scope); })
-      .catch(function(e){ console.warn('[SW] fail', e); });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
 }
+
+// ── Dynamic theme-color meta for status bar ──
+(function() {
+  const DARK_COLOR  = '#0a0f1e';
+  const LIGHT_COLOR = '#f4f6fb';
+
+  function applyThemeColor(isDark) {
+    // Update existing <meta name="theme-color"> tags
+    document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove());
+    const meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    meta.content = isDark ? DARK_COLOR : LIGHT_COLOR;
+    document.head.appendChild(meta);
+  }
+
+  // Watch for data-theme attribute changes on <html>
+  const observer = new MutationObserver(() => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    applyThemeColor(isDark);
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // Initial application
+  window.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    applyThemeColor(isDark);
+  });
+})();
 </script>
+
 </body>
 </html>

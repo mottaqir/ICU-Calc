@@ -1,7 +1,7 @@
 // ═══ iCU Calc — Service Worker ═══
 // Bump CACHE_VERSION every time you deploy a new index.html so old
 // devices drop the stale cache instead of getting stuck on it.
-const CACHE_VERSION = 'icu-calc-v2';
+const CACHE_VERSION = 'icu-calc-v4';
 const CACHE_NAME = `icu-calc-${CACHE_VERSION}`;
 
 const APP_SHELL = [

@@ -12,7 +12,6 @@
 <!-- Static fallback theme-color (read by OS/browser chrome before JS runs).
      JS below overrides #themeColorMeta live on every theme toggle. -->
 <meta name="theme-color" id="themeColorMeta" content="#0d1117" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f6f8fa" media="(prefers-color-scheme: light)">
 
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="application-name" content="iCU Calc">
@@ -873,6 +872,26 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
 </style>
 </head>
 <body>
+<script>
+// Apply theme immediately (before any content below paints) so the OS
+// status bar / theme-color meta are correct on THIS load — this is what
+// makes "toggle theme, then pull-to-refresh or relaunch" actually unify
+// the status bar instead of leaving the old style stuck until the load
+// after next.
+(function() {
+ let saved = null;
+ try { saved = localStorage.getItem('syringe-pump-theme'); } catch (e) {}
+ if (!saved) saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+ if (saved === 'light') document.body.setAttribute('data-theme', 'light');
+ var metaTC = document.getElementById('themeColorMeta');
+ if (metaTC) {
+   metaTC.removeAttribute('media'); // JS is now authoritative over the static media-query fallback
+   metaTC.setAttribute('content', saved === 'light' ? '#f6f8fa' : '#0d1117');
+ }
+ var metaSB = document.getElementById('appleStatusBarMeta');
+ if (metaSB) metaSB.setAttribute('content', saved === 'light' ? 'default' : 'black-translucent');
+})();
+</script>
 
 <!-- ═══ APP HEADER ═══ -->
 <header class="app-header">
@@ -5818,7 +5837,7 @@ function calcHeparin() {
  holdMsg = 'Hold infusion for 1 hour, then restart at reduced rate';
  }
 
- const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+ const isLight = document.body.getAttribute('data-theme') === 'light';
  const hepColor = isLight ? '#1d4ed8' : '#93c5fd';
  document.getElementById('hep-action').textContent = action;
  document.getElementById('hep-action').style.color = hepColor;
@@ -5935,20 +5954,11 @@ function menuWtSync(val) {
 function menuWtAutoApply(val) { syncGlobalWeight(val); }
 function applyGlobalWt() { menuWtAutoApply(document.getElementById('menu-wt-num').value); closeMenu(); }
 
-// Apply theme early to prevent flash
-(function() {
- let saved = null;
- try { saved = localStorage.getItem('syringe-pump-theme'); } catch (e) {}
- if (!saved) saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
- if (saved === 'light') document.body.setAttribute('data-theme', 'light');
- var metaTC = document.getElementById('themeColorMeta');
- if (metaTC) {
-   metaTC.removeAttribute('media'); // JS is now authoritative over the static media-query fallback
-   metaTC.setAttribute('content', saved === 'light' ? '#f6f8fa' : '#0d1117');
- }
- var metaSB = document.getElementById('appleStatusBarMeta');
- if (metaSB) metaSB.setAttribute('content', saved === 'light' ? 'default' : 'black-translucent');
-})();
+// Theme (data-theme attribute + theme-color/status-bar meta) is already
+// applied by the inline script right after <body> — this early placement
+// is what lets a pull-to-refresh or app relaunch actually re-sync the OS
+// status bar to the last-picked theme. Nothing further to do here except
+// re-sync the icon state below.
 
 window.addEventListener('load', function() {
  updateAll();

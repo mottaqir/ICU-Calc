@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.mottaqir.twa",
-        "sha256_cert_fingerprints": ["56:8A:31:4E:E4:C2:BC:C1:09:A8:09:FC:3B:42:66:B5:EC:93:34:AC:08:CE:75:EF:B1:56:39:72:F1:C3:4A:30"]
-      }
-    }]

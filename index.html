@@ -259,20 +259,32 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
-  width: 23px; height: 11px; border-radius: 5px;
-  background: linear-gradient(90deg, #3a5a85, #16283f);
-  border: 1px solid #fff;
+  width: 26px; height: 14px; border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 3.5px, rgba(163,170,181,.9) 3.5px, rgba(163,170,181,.9) 4.5px, transparent 4.5px),
+    linear-gradient(90deg, transparent 7.5px, rgba(163,170,181,.9) 7.5px, rgba(163,170,181,.9) 8.5px, transparent 8.5px),
+    linear-gradient(90deg, transparent 11.5px, rgba(163,170,181,.9) 11.5px, rgba(163,170,181,.9) 12.5px, transparent 12.5px),
+    linear-gradient(90deg, transparent 15.5px, rgba(163,170,181,.9) 15.5px, rgba(163,170,181,.9) 16.5px, transparent 16.5px),
+    linear-gradient(90deg, transparent 19.5px, rgba(163,170,181,.9) 19.5px, rgba(163,170,181,.9) 20.5px, transparent 20.5px),
+    linear-gradient(90deg, #3a5a85, #16283f);
+  border: 1px solid #9aa3ad;
   box-shadow: 0 1px 3px rgba(0,0,0,.35);
-  margin-top: -2.5px; cursor: pointer;
+  margin-top: -4px; cursor: pointer;
 }
 input[type=range]::-moz-range-track {
   height: 6px; border-radius: 999px;
   background: linear-gradient(90deg, #3a5a85, #16283f);
 }
 input[type=range]::-moz-range-thumb {
-  width: 23px; height: 11px; border-radius: 5px;
-  background: linear-gradient(90deg, #3a5a85, #16283f);
-  border: 1px solid #fff;
+  width: 26px; height: 14px; border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 3.5px, rgba(163,170,181,.9) 3.5px, rgba(163,170,181,.9) 4.5px, transparent 4.5px),
+    linear-gradient(90deg, transparent 7.5px, rgba(163,170,181,.9) 7.5px, rgba(163,170,181,.9) 8.5px, transparent 8.5px),
+    linear-gradient(90deg, transparent 11.5px, rgba(163,170,181,.9) 11.5px, rgba(163,170,181,.9) 12.5px, transparent 12.5px),
+    linear-gradient(90deg, transparent 15.5px, rgba(163,170,181,.9) 15.5px, rgba(163,170,181,.9) 16.5px, transparent 16.5px),
+    linear-gradient(90deg, transparent 19.5px, rgba(163,170,181,.9) 19.5px, rgba(163,170,181,.9) 20.5px, transparent 20.5px),
+    linear-gradient(90deg, #3a5a85, #16283f);
+  border: 1px solid #9aa3ad;
   box-shadow: 0 1px 3px rgba(0,0,0,.35);
   cursor: pointer;
 }
@@ -291,6 +303,31 @@ input[type=range]::-moz-range-progress {
 .result-big { font-family: var(--numfont); font-size: 26px; font-weight: 700; }
 .result-unit { font-size: 12px; color: var(--muted); margin-left: 3px; }
 
+/* ── Tiny inline dropdown chip (e.g. Noradrenaline strength, sits right under drug title) ── */
+.mini-select { position: relative; display: inline-flex; vertical-align: baseline; }
+.mini-select-trigger {
+  display: inline-flex; align-items: center; gap: 2px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text); font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 0px 4px; margin: 0; line-height: 1.5; cursor: pointer;
+}
+.mini-select-trigger::after { content: '▾'; font-size: 6px; color: var(--muted); margin-left: 1px; transition: transform 0.15s; }
+.mini-select.open .mini-select-trigger { border-color: var(--accent); }
+.mini-select.open .mini-select-trigger::after { transform: rotate(180deg); }
+.mini-select-panel {
+  display: none; position: absolute; top: calc(100% + 3px); left: 0; z-index: 9999;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+  min-width: 56px; overflow: hidden;
+}
+.mini-select-panel.open { display: block; }
+.mini-select-option {
+  display: block; padding: 5px 9px; font-size: 10px; font-family: var(--mono);
+  color: var(--text); cursor: pointer; white-space: nowrap;
+}
+.mini-select-option:hover { background: rgba(255,255,255,0.07); }
+.mini-select-option.selected { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+
 /* ── Note Box ── */
 .note-box {
   margin-top: 10px; font-size: 11.5px; color: var(--muted);
@@ -298,7 +335,25 @@ input[type=range]::-moz-range-progress {
   border-left: 2px solid var(--accent);
   border-radius: 0 6px 6px 0;
   padding: 8px 12px; line-height: 1.55;
+  text-align: justify; text-justify: inter-word;
 }
+.ref-info-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 1px solid var(--faint); color: var(--faint);
+  font-size: 10px; font-style: italic; font-family: Georgia, serif;
+  cursor: pointer; margin-left: 5px; vertical-align: middle;
+  user-select: none; flex-shrink: 0;
+}
+.ref-info-btn:active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.ref-popup {
+  display: none; margin-top: 8px; padding: 8px 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; font-size: 10px; color: var(--faint);
+  line-height: 1.5; width: fit-content; max-width: 100%;
+  text-align: left;
+}
+.ref-popup.show { display: block; }
 
 /* ── Bolus Cards ── */
 .bolus-card {
@@ -346,6 +401,22 @@ input[type=range]::-moz-range-progress {
   flex-shrink: 0; background: var(--accent) !important;
   align-self: center; margin-top: 0;
 }
+/* Special Calc cards (title has a sibling pin button): dot becomes an
+   expand/collapse chevron (same shape as the dropdown arrows), sized to
+   visually balance the star on the right. Rest = points right, expanded = points down. */
+.calc-title:has(.calc-pin) .calc-title-dot {
+  width: 15px !important; height: 15px !important; border-radius: 0 !important;
+  background: var(--accent) !important; flex-shrink: 0;
+  align-self: center; margin-top: 0;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-size: contain; mask-size: contain;
+  transform: rotate(-90deg);
+  transition: transform .28s cubic-bezier(.34,1.2,.64,1);
+}
+.calc-card.is-expanded .calc-title:has(.calc-pin) .calc-title-dot { transform: rotate(0deg); }
 .calc-chevron {
   margin-left: auto; font-size: 11px; color: var(--muted);
   transition: transform .22s ease; flex-shrink: 0;
@@ -358,26 +429,15 @@ input[type=range]::-moz-range-progress {
   align-items: center; justify-content: center; margin-left: auto;
   background: transparent; border: none; padding: 0; cursor: pointer;
   font-size: 16px; line-height: 1; color: var(--text-faint);
-  transition: color .15s ease;
+  transition: color .2s ease;
 }
 .calc-pin-icon {
   display: inline-block;
-  transition: transform .32s cubic-bezier(.34,1.2,.64,1);
 }
-.calc-pin:hover { color: var(--accent); }
-.calc-pin:hover .calc-pin-icon { transform: scale(1.18); }
-.calc-card.is-expanded .calc-pin-icon { transform: rotate(180deg); }
-.calc-card.is-expanded .calc-pin:hover .calc-pin-icon { transform: rotate(180deg) scale(1.18); }
-.calc-pin.pinned .calc-pin-icon {
-  background: linear-gradient(135deg, #3a5a85, #16283f);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent; -webkit-text-fill-color: transparent;
+@media (hover: hover) {
+  .calc-pin:hover { color: var(--accent); }
 }
-[data-theme="light"] .calc-pin.pinned .calc-pin-icon {
-  background: linear-gradient(135deg, #2c4a73, #0f1f38);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent; -webkit-text-fill-color: transparent;
-}
+.calc-pin.pinned { color: var(--accent); }
 .calc-card.is-pinned { border-color: var(--accent); }
 .pinned-section-label {
   display: none; font-family: var(--mono); font-size: 9.5px;
@@ -936,7 +996,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
  <div class="drug-card" id="card-nora">
  <div class="drug-header" onclick="toggleCard('nora')">
  <div class="drug-dot" style="background:#ef4444"></div>
- <div style="flex:1"><div class="drug-name">Noradrenaline</div><div class="drug-dilution">8mg + 5% DA &rarr; 50ml<br>Conc: 160mcg/ml</div></div>
+ <div style="flex:1"><div class="drug-name">Noradrenaline</div><div class="drug-dilution"><span class="mini-select" id="mini-nora-strength"><button type="button" class="mini-select-trigger" id="mini-nora-strength-trigger" onclick="toggleMiniSelect(event,'mini-nora-strength')">8mg</button><span class="mini-select-panel" data-owner="mini-nora-strength"><span class="mini-select-option" onclick="pickNoradStrength(event,4)">4mg</span><span class="mini-select-option selected" onclick="pickNoradStrength(event,8)">8mg</span><span class="mini-select-option" onclick="pickNoradStrength(event,12)">12mg</span></span></span> + 5% DA &rarr; 50ml<br>Conc: <span id="dil-nora-conc">160</span>mcg/ml</div></div>
  <div class="drug-rate-preview"><div class="rate-caption">S/P rate</div><div class="rate-line"><div class="rate-num" style="color:#ef4444" id="rate-nora">&mdash;</div><div class="rate-unit">ml/hr</div></div></div>
  </div>
  <div class="drug-body">
@@ -944,10 +1004,9 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
  <div class="dose-label"><span>Weight</span><span class="dose-val" style="color:#60a5fa"><span id="cwt-val-nora">60</span> kg</span></div>
  <input type="range" id="cwt-nora" min="30" max="120" step="1" value="60" oninput="cwtSync('nora',this.value)" style="accent-color:#60a5fa">
 </div>
- 
  <div class="dose-row">
  <div class="dose-label"><span>Dose</span><span class="dose-val" style="color:#ef4444"><span id="dv-nora">0.100</span> mcg/kg/min</span></div>
- <input type="range" id="range-nora" min="0.025" max="0.35" step="0.025" value="0.1" oninput="calcInfusion('nora',this.value,60,160,'mcg/kg/min')" style="accent-color:#ef4444">
+ <input type="range" id="range-nora" min="0.025" max="0.35" step="0.025" value="0.1" oninput="calcNora(this.value)" style="accent-color:#ef4444">
  <div class="range-limits"><span>0.025</span><span>0.35</span></div>
  </div>
  <div class="note-box">&#9888;&#65039; Do NOT use NS &mdash; unstable in normal saline</div>
@@ -1219,7 +1278,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
  <div class="drug-card" id="card-kcl">
  <div class="drug-header" onclick="toggleCard('kcl')">
  <div class="drug-dot" style="background:#10b981"></div>
- <div style="flex:1"><div class="drug-name">KT <span class="brand-name">(KCl)</span> &mdash; CV Line</div><div class="drug-dilution">25ml KT + 25ml NS &rarr; 50ml<br>Conc: 1mmol/ml</div></div>
+ <div style="flex:1"><div class="drug-name">KT <span class="brand-name">(KCl)</span> &mdash; PICC / CV Line only</div><div class="drug-dilution">25ml KT + 25ml NS &rarr; 50ml<br>Conc: 1mmol/ml</div></div>
  <div class="drug-rate-preview"><div class="rate-caption">S/P rate</div><div class="rate-line"><div class="rate-num" style="color:#10b981" id="rate-kcl">10</div><div class="rate-unit">ml/hr</div></div></div>
  </div>
  <div class="drug-body">
@@ -1228,7 +1287,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
  <input type="range" id="range-kcl" min="5" max="20" step="5" value="10" oninput="calcFixed('kcl',this.value)" style="accent-color:#10b981">
  <div class="range-limits"><span>5</span><span>20 (max)</span></div>
  </div>
- <div class="note-box">&#9888;&#65039; Central line ONLY | Max 20mmol/hr | 1 amp = 10ml = 20mmol</div>
+ <div class="note-box">&#9888;&#65039; Only through PICC / CV Line | Max 20mmol/hr | 1 amp = 10ml = 20mmol</div>
  </div>
  </div>
  <div class="drug-card" id="card-ins">
@@ -1243,7 +1302,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
  <input type="range" id="range-ins" min="1" max="10" step="1" value="2" oninput="calcFixed('ins',this.value)" style="accent-color:#10b981">
  <div class="range-limits"><span>1</span><span>10</span></div>
  </div>
- <div class="note-box">1ml = 1unit | Rate ml/hr = units/hr directly<br><strong>N.B.</strong> If CBG &le; 8mmol/L &rarr; give 4units S/C bolus, then stop IV infusion after 20 min.</div>
+ <div class="note-box">1ml = 1unit | Rate ml/hr = units/hr directly<br>Before stopping IV insulin, give SC basal insulin (glargine/detemir or NPH) 1&ndash;2 hrs early &mdash; don't stop IV right after one SC dose. Basal dose &asymp; 50&ndash;80% of total insulin given in last 24h. Stopping IV too soon can cause blood sugar to rebound high.<span class="ref-info-btn" onclick="toggleRef('ref-ins')">i</span><div class="ref-popup" id="ref-ins">Ref: ADA Consensus Report, Diabetologia 2024 &bull; SCCM Insulin Infusion Guidelines, Crit Care Med 2012</div></div>
  </div>
  </div>
  <div class="drug-card" id="card-lasix">
@@ -4428,7 +4487,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
   <div class="aht-card" id="aht-vasodilator">
    <div class="aht-header" onclick="toggleAHT('aht-vasodilator')">
     <div style="flex:1">
-     <div style="font-weight:700;font-size:12px;color:var(--text-strong)">Vasodilators</div>
+     <div style="font-weight:700;font-size:14px;color:var(--text-strong)">Vasodilators</div>
      <div style="font-size:10px;color:var(--text-faint)">Isosorbide · GTN · SNP · Hydralazine</div>
     </div>
     <span class="aht-class-badge" style="background:#ef444420;color:#ef4444">Vasodilator</span>
@@ -4504,7 +4563,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
   <div class="aht-card" id="aht-betablocker">
    <div class="aht-header" onclick="toggleAHT('aht-betablocker')">
     <div style="flex:1">
-     <div style="font-weight:700;font-size:12px;color:var(--text-strong)">Beta-Blockers</div>
+     <div style="font-weight:700;font-size:14px;color:var(--text-strong)">Beta-Blockers</div>
      <div style="font-size:10px;color:var(--text-faint)">Atenolol · Metoprolol · Labetalol · Esmolol</div>
     </div>
     <span class="aht-class-badge" style="background:#8b5cf620;color:#8b5cf6">β-Blocker</span>
@@ -4582,7 +4641,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
   <div class="aht-card" id="aht-ccb">
    <div class="aht-header" onclick="toggleAHT('aht-ccb')">
     <div style="flex:1">
-     <div style="font-weight:700;font-size:12px;color:var(--text-strong)">Calcium Channel Blockers</div>
+     <div style="font-weight:700;font-size:14px;color:var(--text-strong)">Calcium Channel Blockers</div>
      <div style="font-size:10px;color:var(--text-faint)">Amlodipine · Diltiazem · Verapamil · Nicardipine</div>
     </div>
     <span class="aht-class-badge" style="background:#f59e0b20;color:#f59e0b">CCB</span>
@@ -4658,7 +4717,7 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
   <div class="aht-card" id="aht-other">
    <div class="aht-header" onclick="toggleAHT('aht-other')">
     <div style="flex:1">
-     <div style="font-weight:700;font-size:12px;color:var(--text-strong)">Other / Special Situations</div>
+     <div style="font-weight:700;font-size:14px;color:var(--text-strong)">Other / Special Situations</div>
      <div style="font-size:10px;color:var(--text-faint)">ACEi/ARB · Phentolamine · MgSO₄ · Enalaprilat</div>
     </div>
     <span class="aht-class-badge" style="background:#10b98120;color:#10b981">Special</span>
@@ -5519,6 +5578,11 @@ body:not([data-theme="light"]) .gs-bar { background: linear-gradient(90deg, #162
 let volStatus = 'depleted';
 let optionalOpen = false;
 
+function toggleRef(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show');
+}
+
 const bolusData = [
  { name:"Amiodarone", cat:"Anti-arrhythmic", color:"#58a6ff", amp:"1 amp = 3ml = 150mg", doseMin:null, doseMax:null, unit:"150mg fixed bolus", headerLabel:"150 – 300 mg", onset:"5-10 min", duration:"Variable", note:"Inj. 150mg (1 amp) in 20ml 5% DA IV over 20-30 min. N.B. Maximum 2 bolus doses. If AF not corrected after 2nd bolus → start maintenance infusion." },
  { name:"Labetalol", cat:"Anti-hypertensive", color:"#58a6ff", amp:"1 amp = 10ml = 50mg", doseMin:0.25, doseMax:0.5, unit:"mg/kg IV over 10 min", onset:"5-10 min", duration:"3-6 hr", note:"Usual dose: 20-80mg slow IV | Repeat every 10 min PRN | Max cumulative: 300mg | CI: Asthma, bradycardia, heart block, decompensated HF" },
@@ -5652,7 +5716,7 @@ function renderBolus() {
    <div class="meta-box"><div class="ml">Onset</div><div class="mv">${d.onset}</div></div>
    <div class="meta-box"><div class="ml">Duration</div><div class="mv">${d.duration}</div></div>
   </div>
-  <div class="note-box" style="margin-top:8px">&#9200; Check CBG every 1–2 hr &nbsp;|&nbsp; Target: 8–10 mmol/L</div>`;
+  <div class="note-box" style="margin-top:8px">&#9200; Target CBG: 8–10 mmol/L<br>Check every 4–8 hrly (if stable CBG for last 12–24 hr)<br>But if CBG &ge;12 mmol/L, then check 2–4 hrly</div>`;
  } else if (d.doseMin === null) {
   bodyContent = `
   <div class="note-box" style="margin-top:10px">&#8505;&#65039; ${d.note.replace(/\n/g, '<br>&nbsp;&nbsp;')}</div>
@@ -5724,6 +5788,66 @@ function updateBolusDoses(v) {
 }
 
 function toggleBolus(id) { document.getElementById(id).classList.toggle('open'); }
+
+window.noradConc = 160;
+function calcNora(dose) {
+ calcInfusion('nora', dose, 60, window.noradConc, 'mcg/kg/min');
+}
+function getMiniPanel(id) {
+ return document.querySelector('.mini-select-panel[data-owner="' + id + '"]');
+}
+function closeAllMiniSelects() {
+ document.querySelectorAll('.mini-select.open').forEach(function(el) {
+  el.classList.remove('open');
+  const panel = getMiniPanel(el.id);
+  if (panel) {
+   panel.classList.remove('open');
+   if (panel.parentElement === document.body) {
+    panel.style.position = ''; panel.style.top = ''; panel.style.left = ''; panel.style.minWidth = '';
+    el.appendChild(panel);
+   }
+  }
+ });
+}
+function toggleMiniSelect(e, id) {
+ e.stopPropagation();
+ const el = document.getElementById(id);
+ const wasOpen = el.classList.contains('open');
+ closeAllMiniSelects();
+ if (wasOpen) return;
+ const trigger = el.querySelector('.mini-select-trigger');
+ const panel = getMiniPanel(id);
+ if (!trigger || !panel) return;
+ const r = trigger.getBoundingClientRect();
+ panel.style.position = 'fixed';
+ panel.style.top = (r.bottom + 3) + 'px';
+ panel.style.left = r.left + 'px';
+ panel.style.minWidth = Math.max(56, r.width) + 'px';
+ document.body.appendChild(panel);
+ panel.classList.add('open');
+ el.classList.add('open');
+}
+document.addEventListener('click', function(e) {
+ if (e.target.closest('.mini-select-panel') || e.target.closest('.mini-select-trigger')) return;
+ closeAllMiniSelects();
+});
+window.addEventListener('scroll', closeAllMiniSelects, true);
+window.addEventListener('resize', closeAllMiniSelects);
+function pickNoradStrength(e, mg) {
+ e.stopPropagation();
+ const amt = parseFloat(mg);
+ const conc = Math.round((amt * 1000) / 50);
+ window.noradConc = conc;
+ const trigEl = document.getElementById('mini-nora-strength-trigger');
+ const concEl = document.getElementById('dil-nora-conc');
+ if (trigEl) trigEl.textContent = amt + 'mg';
+ if (concEl) concEl.textContent = conc;
+ document.querySelectorAll('[data-owner="mini-nora-strength"] .mini-select-option').forEach(o => o.classList.remove('selected'));
+ e.target.classList.add('selected');
+ closeAllMiniSelects();
+ const doseEl = document.getElementById('range-nora');
+ if (doseEl) calcNora(doseEl.value);
+}
 
 function calcInfusion(id, dose, multiplier, conc, unit) {
  const wtEl = document.getElementById('cwt-' + id);
@@ -5800,6 +5924,15 @@ function calcK() {
  document.getElementById('k-result-total-detail').textContent = 'Deficit ' + deficit.toFixed(0) + ' + Maintenance ' + dailyReq.toFixed(0) + ' (1mmol/kg/day) = ' + totalWithDaily.toFixed(0) + ' mmol over 24hr';
 }
 
+function calcAmio() {
+ const el = document.getElementById('amio-result');
+ if (!el) return;
+ const wt = getWt();
+ const bolus = (5 * wt).toFixed(0);
+ const maint = (15 * wt).toFixed(0);
+ el.innerHTML = 'Bolus: ' + bolus + 'mg (' + Math.ceil(bolus/150) + ' amp)<br>Maintenance: ' + maint + 'mg/24hr (' + Math.ceil(maint/150) + ' amp)';
+}
+
 function calcHeparin() {
  const aptt = parseFloat(document.getElementById('aptt-val').value) || 60;
  const wt = parseFloat(document.getElementById('hep-wt').value) || 60;
@@ -5848,10 +5981,17 @@ function calcHeparin() {
  document.getElementById('hep-init').textContent = initText;
 }
 
+function calcPheny() {
+ const wt = getWt();
+ const dose = (15 * wt).toFixed(0);
+ const amps = Math.ceil(dose / 100);
+ document.getElementById('pheny-result').textContent = dose + 'mg = ' + amps + ' amps → give over ' + amps + ' min';
+}
+
 function updateAll() {
  const g = id => { const el = document.getElementById(id); return el ? el.value : null; };
  try {
-  if (g('range-nora')) calcInfusion('nora', g('range-nora'), 60, 160, 'mcg/kg/min');
+  if (g('range-nora')) calcInfusion('nora', g('range-nora'), 60, window.noradConc || 160, 'mcg/kg/min');
   if (g('range-vaso')) calcVaso(g('range-vaso'));
   if (g('range-adren')) calcInfusion('adren', g('range-adren'), 60, 160, 'mcg/kg/min');
   if (g('range-dopa')) calcInfusion('dopa', g('range-dopa'), 60, 8000, 'mcg/kg/min');
@@ -5870,6 +6010,7 @@ function updateAll() {
  try { calcNaCl(); } catch(e) {}
  try { calcBicarb(); } catch(e) {}
  try { calcK(); } catch(e) {}
+ try { calcAmio(); } catch(e) {}
  try { calcHeparin(); } catch(e) {}
  try { updateBolusDoses(getWt()); } catch(e) {}
 }
@@ -5911,11 +6052,6 @@ function openMenu() {
   if (b) b.classList.toggle('active-tab', !!document.getElementById('tab-' + t)?.classList.contains('active'));
  });
 }
-function closeECGModal(e) {
- if (e && e.target !== e.currentTarget) return;
- document.getElementById('ecg-modal').classList.remove('open');
-}
-
 function closeMenu() {
  const panel = document.getElementById('menuPanel');
  const overlay = document.getElementById('menuOverlay');
@@ -7904,7 +8040,7 @@ function applyFavoriteCalcs() {
     var cid = btn.getAttribute('data-cid');
     var isFav = !!favSet[cid];
     var icon = btn.querySelector('.calc-pin-icon');
-    if (icon) icon.textContent = isFav ? '\u2605' : '\u2606';
+    if (icon) icon.textContent = '\u2606';
     btn.classList.toggle('pinned', isFav);
     btn.title = isFav ? 'Unpin' : 'Pin to top';
     var card = document.getElementById(cid);
@@ -8862,11 +8998,32 @@ function gsClose() {
 
 window.addEventListener('load', function () { setTimeout(function () { gsBuildIndex(); gsLoadRecent(); }, 150); });
 
-// ═══ PWA: register service worker ═══
+// ═══ PWA: register service worker + auto-update ═══
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./service-worker.js').catch(function (err) {
-      console.warn('Service worker registration failed:', err);
+    navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
+      .then(function (reg) {
+        // Check for a newer service worker right away, then whenever
+        // network comes back, the tab becomes visible again, or every hour.
+        reg.update();
+        window.addEventListener('online', function () { reg.update(); });
+        document.addEventListener('visibilitychange', function () {
+          if (document.visibilityState === 'visible') reg.update();
+        });
+        setInterval(function () { reg.update(); }, 60 * 60 * 1000);
+      })
+      .catch(function (err) {
+        console.warn('Service worker registration failed:', err);
+      });
+
+    // Once a new service worker activates and takes control (old cache
+    // already dropped in its 'activate' handler), reload once so this
+    // open tab picks up the fresh content immediately.
+    let refreshed = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (refreshed) return;
+      refreshed = true;
+      window.location.reload();
     });
   });
 }
